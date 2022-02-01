@@ -23,11 +23,14 @@ E=function(e,nth=0){
 
     return {
         line:function(x1,y1,x2,y2,easetype=0,duration=0){
-            var t;
+            var xA=x1,yA=y1;
             if(typeof x1==="string"){if(x1.indexOf("%")>-1){x1=window.innerWidth  * (parseInt(x1.split("%")[0]) / 100)}}
             if(typeof y1==="string"){if(y1.indexOf("%")>-1){y1=window.innerHeight * (parseInt(y1.split("%")[0]) / 100)}}
             if(typeof x2==="string"){if(x2.indexOf("%")>-1){x2=window.innerWidth  * (parseInt(x2.split("%")[0]) / 100)}}
             if(typeof y2==="string"){if(y2.indexOf("%")>-1){y2=window.innerHeight * (parseInt(y2.split("%")[0]) / 100)}}
+
+            if(typeof xA!=="string"){xA=x1+E.units}
+            if(typeof yA!=="string"){yA=y1+E.units}
 
             var c=document.createElement("span"),
             l=Math.hypot(y2-y1,x2-x1),
@@ -37,16 +40,16 @@ E=function(e,nth=0){
             c.style=`
                 transform-origin:left 50%;
                 position:${E.position};
-                left:${x1}${E.units};
-                top:${y1}${E.units};
+                left:${xA};
+                top:${yA};
                 height:${E.width}${E.units};
                 transform:rotate(${d}deg);
-                background-color:${E.fcolor}                    
+                background-color:${E.fcolor}
             `
             c.setAttribute("class","line");
             e.appendChild(c);
             //c.animate({width:[0+E.units,l+E.units]},speed)
-   
+
             var begin=performance.now(),easefunc,now;
 
             //イージングタイプによって処理を分ける
@@ -62,12 +65,12 @@ E=function(e,nth=0){
                 //進捗（0〜100%）を加算する。durationに指定したms分時間がかかる
                 now=performance.now()
                 progress=Math.max(0,Math.min(((now-begin)/duration*100),100));
-            
+
                     //フェードイン
                     c.style.width = l*(1-1/(progress*easefunc(progress/100))) + E.units;
 
                 //その要素のCSSカスタムプロパティの--make-lineがtrueである場合は続行
-                if( 
+                if(
                     progress<100 &&
                     c.style.getPropertyValue("--make-line")=="true"
                 ){
@@ -76,10 +79,10 @@ E=function(e,nth=0){
                     c.style.setProperty("--make-line","false")
                 }
             }
-            
+
             //初回実行
             requestAnimationFrame(ease);
-            
+
             return E(c);
         },
         box:function(x,y,w,h){
