@@ -22,7 +22,7 @@ E=function(e,nth=0){
     }
 
     return {
-        line:function(x1,y1,x2,y2,easetype,duration){
+        line:function(x1,y1,x2,y2,easetype=0,duration=0){
             var t;
             if(typeof x2==="string"){if(x2.indexOf("%")>-1){x2=window.innerWidth  * (parseInt(x2.split("%")[0]) / 100)}}
             if(typeof y2==="string"){if(y2.indexOf("%")>-1){y2=window.innerHeight * (parseInt(y2.split("%")[0]) / 100)}}
@@ -31,8 +31,7 @@ E=function(e,nth=0){
             l=Math.hypot(y2-y1,x2-x1),
             d=Math.atan2(y2-y1,x2-x1)*180/Math.PI,
             progress;
-        //      width:${l};
-         
+
             c.style=`
                 transform-origin:left 50%;
                 position:${E.position};
@@ -46,7 +45,6 @@ E=function(e,nth=0){
             e.appendChild(c);
             //c.animate({width:[0+E.units,l+E.units]},speed)
    
-            easetype=easetype.toLowerCase()
             var begin=performance.now(),easefunc,now;
 
             //イージングタイプによって処理を分ける
@@ -54,7 +52,7 @@ E=function(e,nth=0){
                 duration=easetype;
                 easefunc=E.easelist.linear
             }else{
-                easefunc=E.easelist[easetype]
+                easefunc=E.easelist[easetype.toLowerCase()]
             }
             //移動する
             c.style.setProperty("--make-line","true")
@@ -317,8 +315,7 @@ E=function(e,nth=0){
             //移動完了したタイミングで--moveをfalseにしておく
             return E(e);
         },
-        fadeout:function(easetype,duration,reverse=false){
-            easetype=easetype.toLowerCase()
+        fadeout:function(easetype=0,duration=0,reverse=false){
             var begin=performance.now(),easefunc,now,progress;
 
             //イージングタイプによって処理を分ける
@@ -326,7 +323,7 @@ E=function(e,nth=0){
                 duration=easetype;
                 easefunc=E.easelist.linear
             }else{
-                easefunc=E.easelist[easetype]
+                easefunc=E.easelist[easetype.toLowerCase()]
             }
             //移動する
             e.style.setProperty("--fade","true")
@@ -360,14 +357,12 @@ E=function(e,nth=0){
             //初回実行
             requestAnimationFrame(ease);
             
-            //移動完了したタイミングで--fadeをfalseにしておく
-
             return E(e);
         },
-        fadein:function(easetype,duration){
+        fadein:function(easetype=0,duration=0){
             E(e).fadeout(easetype,duration,true)
         },
-        remove:function(duration){
+        remove:function(duration=0){
             setTimeout(function(){
                 e.remove();
             },duration)
@@ -410,7 +405,7 @@ E=function(e,nth=0){
         getbcolor:function(){
             return E(e).getcolor("background-color");
         },
-        setcolor:function(type,colorB,easetype,duration=0){
+        setcolor:function(type,colorB,easetype=0,duration=0){
             var cstr,colorA,diff={},r,g,b,a;
 
             // 指定しようとする色の書式が文字列型の場合
@@ -471,6 +466,7 @@ E=function(e,nth=0){
                         colorB.a=1;
                     }
                 }
+
             // 現在の要素の背景色を取得
                 colorA=E(e).getcolor(type);
                 diff.r=colorA.r-colorB.r
@@ -482,11 +478,12 @@ E=function(e,nth=0){
 
             var begin=performance.now(),easefunc,now,progress,m;
             //イージングタイプによって処理を分ける
-            easetype=easetype.toLowerCase()
+
             if(Number.isInteger(easetype)){
                 duration=easetype;
                 easefunc=E.easelist.linear
             }else{
+                easetype=easetype.toLowerCase()
                 easefunc=E.easelist[easetype]
             }
 
@@ -551,8 +548,8 @@ E=function(e,nth=0){
 
             return E(e);
         },
-        bcolor:function(colorB,easetype,duration){return E(e).setcolor("background-color",colorB,easetype,duration)},
-        fcolor:function(colorB,easetype,duration){return E(e).setcolor("color",colorB,easetype,duration)}
+        bcolor:function(colorB,easetype=0,duration=0){return E(e).setcolor("background-color",colorB,easetype,duration)},
+        fcolor:function(colorB,easetype=0,duration=0){return E(e).setcolor("color",colorB,easetype,duration)}
     }
 }
 
