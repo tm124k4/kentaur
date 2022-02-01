@@ -24,6 +24,8 @@ E=function(e,nth=0){
     return {
         line:function(x1,y1,x2,y2,easetype=0,duration=0){
             var t;
+            if(typeof x1==="string"){if(x1.indexOf("%")>-1){x1=window.innerWidth  * (parseInt(x1.split("%")[0]) / 100)}}
+            if(typeof y1==="string"){if(y1.indexOf("%")>-1){y1=window.innerHeight * (parseInt(y1.split("%")[0]) / 100)}}
             if(typeof x2==="string"){if(x2.indexOf("%")>-1){x2=window.innerWidth  * (parseInt(x2.split("%")[0]) / 100)}}
             if(typeof y2==="string"){if(y2.indexOf("%")>-1){y2=window.innerHeight * (parseInt(y2.split("%")[0]) / 100)}}
 
@@ -483,8 +485,7 @@ E=function(e,nth=0){
                 duration=easetype;
                 easefunc=E.easelist.linear
             }else{
-                easetype=easetype.toLowerCase()
-                easefunc=E.easelist[easetype]
+                easefunc=E.easelist[easetype.toLowerCase()]
             }
 
             //移動する
