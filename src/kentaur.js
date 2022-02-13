@@ -393,23 +393,29 @@ E=function(e,nth=0){
             e.style.setProperty("font-size",s)
             return E(e);
         },
-        getcolor:function(type){
+        getcolor:function(type="color"){
+            var X,Y=e.style.getPropertyValue(type),Z,R,G,B,A;
 
             type=type.toLowerCase()
-            if(type=="backgroundcolor"){type="background-Color"}
-            if(type=="color"){type="color"}
 
-            var A=window.getComputedStyle(e,"")[type].match(/\d+/g),
-                B=e.style.getPropertyValue(type),
-                C=B.match(/\d+/g);
-                if(B.indexOf("rgba")>-1 && C.length>3){
-                    return {r:A[0]|0,g:A[1]|0,b:A[2]|0,a:parseFloat(C[3]+"."+C[4])}
+            //各値の初期値を指定しておく
+            if(type=="background-color")    {R=255;G=255;B=255;A=1}
+            if(type=="color")               {R=0  ;G=0  ;B=0  ;A=1}
+
+            if(Y.length>0){
+                //指定したstyleのプロパティに何らかの値が指定されている場合取得する
+                X=window.getComputedStyle(e,"")[type].match(/\d+/g);
+                Z=Y.match(/\d+/g);
+                if(Y.indexOf("rgba")>-1 && Z.length>3){
+                    return {r:X[0]|0,g:X[1]|0,b:X[2]|0,a:parseFloat(Z[3]+"."+Z[4])}
                 }
-                return {r:A[0]|0,g:A[1]|0,b:A[2]|0,a:1}
+                return {r:X[0]|0,g:X[1]|0,b:X[2]|0,a:1}
+            }else{
+                //指定したstyleのプロパティが空白だった場合、初期値を代入する
+                return {r:R,g:G,b:B}
+            }
         },
-        getbcolor:function(){
-            return E(e).getcolor("background-color");
-        },
+        getbcolor:function(){return E(e).getcolor("background-color");},
         setcolor:function(type,colorB,easetype=0,duration=0){
             var cstr,colorA,diff={},r,g,b,a;
 
@@ -472,7 +478,7 @@ E=function(e,nth=0){
                     }
                 }
 
-            // 現在の要素の背景色を取得
+                // 現在の要素の背景色を取得
                 colorA=E(e).getcolor(type);
                 diff.r=colorA.r-colorB.r
                 diff.g=colorA.g-colorB.g
@@ -551,8 +557,18 @@ E=function(e,nth=0){
 
             return E(e);
         },
-        bcolor:function(colorB,easetype=0,duration=0){return E(e).setcolor("background-color",colorB,easetype,duration)},
-        fcolor:function(colorB,easetype=0,duration=0){return E(e).setcolor("color",colorB,easetype,duration)},
+        bcolor:function(colorB,easetype=0,duration=0){
+            if(e.style.getPropertyValue("background-color").length<1){
+                e.style.setProperty("background-color","#FFF");
+            }
+            return E(e).setcolor("background-color",colorB,easetype,duration)
+        },
+        fcolor:function(colorB,easetype=0,duration=0){
+            if(e.style.getPropertyValue("color").length<1){
+                e.style.setProperty("color","#000");
+            }
+            return E(e).setcolor("color",colorB,easetype,duration)
+        },
         gettransform:function(){
                 var A=e.style.getPropertyValue("transform")
                 var p=A.split("perspective(")[1]?.split(")")[0]
