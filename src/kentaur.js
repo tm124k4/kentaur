@@ -20,7 +20,6 @@ E=function(e,nth=0){
             }
         }
     }
-
     return {
         line:function(x1,y1,x2,y2,easetype=0,duration=0){
             var xA=x1,yA=y1;
@@ -72,7 +71,7 @@ E=function(e,nth=0){
                 //その要素のCSSカスタムプロパティの--make-lineがtrueである場合は続行
                 if(
                     progress<=100 &&
-                    c.style.getPropertyValue("--make-line")!="false"
+                    c.style.getPropertyValue("--make-line")=="true"
                 ){
                     requestAnimationFrame(ease)
                 }else{
@@ -104,7 +103,7 @@ E=function(e,nth=0){
             `
             c.setAttribute("class","box");
             e.appendChild(c);
-            return E(e);
+            return E(c);
         },
         arc:function(x,y,w,h){
             var c=document.createElement("span");
@@ -126,7 +125,7 @@ E=function(e,nth=0){
             `
             c.setAttribute("class","arc");
             e.appendChild(c);
-            return E(e);
+            return E(c);
         },
         hex:function(x,y,w=E.w,h){
             var c=document.createElement("span");
@@ -147,7 +146,7 @@ E=function(e,nth=0){
             `
             c.setAttribute("class","hex");
             e.appendChild(c);
-            return E(e);
+            return E(c);
         },
         delta:function(x,y,w=E.w,h,d=0){
             var c=document.createElement("span");
@@ -169,7 +168,7 @@ E=function(e,nth=0){
             `
             c.setAttribute("class","delta");
             e.appendChild(c);
-            return E(e);
+            return E(c);
         },
         bezier2:function(x1,y1,dx,dy,x2,y2){
             var a=document.createElementNS("http://www.w3.org/2000/svg","svg"),
@@ -185,7 +184,7 @@ E=function(e,nth=0){
             b.setAttribute("fill","transparent");
             a.appendChild(b);
             e.appendChild(a);
-            return E(e);
+            return E(c);
         },
         /**
          * 円グラフを作成します。
@@ -242,14 +241,14 @@ E=function(e,nth=0){
             c.setAttribute("class","piechart");
             e.appendChild(c);
             E.target=c;
-            return E(e);
+            return E(c);
         },
         make:function(tag,inner,cname){
             var c=document.createElement(tag);
             c.innerHTML=inner;
             if(cname!==void 0){c.setAttribute("class",cname)};
             e.appendChild(c);
-            return E(e);
+            return E(c);
         },
         move:function(x,y,easetype="linear",duration=0){
             var b=e.getBoundingClientRect(),
@@ -301,7 +300,7 @@ E=function(e,nth=0){
                 //かつ、その要素のCSSカスタムプロパティの--moveがtrueである場合は続行
                 if(
                     (progress >= 0 && progress <= 100)
-                    && e.style.getPropertyValue("--move")!="false"
+                    && e.style.getPropertyValue("--move")=="true"
                 ){
                     requestAnimationFrame(move)
                 }else{
@@ -451,6 +450,7 @@ E=function(e,nth=0){
                             colorB.b=colorB.r;
                         }
 
+                        // 透明度
                         colorB.a=colorB.a || 1;
                     }
 
@@ -536,7 +536,7 @@ E=function(e,nth=0){
 
                 e.style.setProperty(type,"rgba("+r+","+g+","+b+","+a+")");
                 //その要素のCSSカスタムプロパティの--fadeがtrueである場合は続行
-                if( e.style.getPropertyValue("--animations-"+type)!="false" && progress<=100){
+                if( e.style.getPropertyValue("--animations-"+type)=="true" && progress<=100){
                         requestAnimationFrame(ease);
                 }else{
                     e.style.setProperty("--animations-"+type,"false")
@@ -652,7 +652,7 @@ E=function(e,nth=0){
                 e.style.setProperty("transform","rotateZ("+(bdeg)+"deg)")
                 //その要素のCSSカスタムプロパティの--fadeがtrueである場合は続行
 
-                if( e.style.getPropertyValue("--animations-rotatez")!="false" && progress<=100 ){
+                if( e.style.getPropertyValue("--animations-rotatez")=="true" && progress<=100 ){
                     requestAnimationFrame(ease);
                 }else{
                     e.style.setProperty("--animations-rotatez","false")
@@ -668,8 +668,17 @@ E=function(e,nth=0){
 
             //移動完了したタイミングで--fadeをfalseにしておく
             return E(e);
+        },
+        border:function(pos,size,linetype,color){
+            return E(E._border(e,pos,size,linetype,color))
         }
     }
+}
+
+E._border=function(target,pos,size="1px",style="solid",color="#000"){
+    target.style.setProperty("border-"+pos+"-style",style);    target.style.setProperty("border-"+pos+"-width",size);
+    target.style.setProperty("border-"+pos+"-color",color);
+    return target;
 }
 
 //現在の状態
