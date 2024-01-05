@@ -13,12 +13,12 @@ Kentaurは、HTMLの各要素へのアニメーション付加や、DOM操作を
 
 このコード1行で、ブラウザのページの背景色が段々と青色へと変化していきます。もちろん、他の色への変更も簡単です。例えば、赤色に変える場合は上記のコードの`#0000FF`の部分を`#FF0000`に変えるだけです。
 
-他にも、KentaurではこのようにHTMLの各要素への回転や移動などを行うコードを1行でシンプルに表記する事ができます。他のメソッドなどについては[リファレンス](https://tamisaka.github.io/kentaur/doc/)を参照してください。
+他にも、KentaurではこのようにHTMLの各要素への回転や移動などを行うコードを1行でシンプルに表記する事ができます。他のメソッドなどについては[リファレンス](https://tm124k4.github.io/kentaur/doc/)を参照してください。
 
 ### リファレンス
 
-[Kentaurリファレンス](https://tamisaka.github.io/kentaur/doc/)
+[Kentaurリファレンス](https://tm124k4.github.io/kentaur/doc/)
 
 ### ライセンス
 
-KentaurはMITライセンスで提供しています。
+MIT License

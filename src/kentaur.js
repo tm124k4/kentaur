@@ -1,9 +1,8 @@
 /** kentaur.js
- *  (c)2021-2022 Takahiro Misaka
+ *  (c)2021-2022 tm124k4
  *  Released under the MIT license.
- *  https://github.com/tamisaka/kentaur/
+ *  https://github.com//kentaur/
  */
-
 
 E=function(e,nth=0){
     var type=Object.prototype.toString.call(e);
